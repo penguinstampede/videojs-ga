@@ -110,12 +110,21 @@ videojs.plugin 'ga', (options = {}) ->
   sendbeacon = ( action, nonInteraction, value ) ->
     # console.log action, " ", nonInteraction, " ", value
     if window.ga
-      ga 'send', 'event',
-        'eventCategory' 	: eventCategory
-        'eventAction'		  : action
-        'eventLabel'		  : eventLabel
-        'eventValue'      : value
-        'nonInteraction'	: nonInteraction
+      if dataLayer
+        dataLayer.push(
+          'event' 	      : eventCategory
+          'eventAction'	  : action
+          'eventLabel'	  : eventLabel
+          'eventValue'      : value
+          'nonInteraction'  : nonInteraction
+        )
+      else
+        ga 'send', 'event',
+          'eventCategory' 	: eventCategory
+          'eventAction'		  : action
+          'eventLabel'		  : eventLabel
+          'eventValue'      : value
+          'nonInteraction'	: nonInteraction
     else if window._gaq
       _gaq.push(['_trackEvent', eventCategory, action, eventLabel, value, nonInteraction])
     else
